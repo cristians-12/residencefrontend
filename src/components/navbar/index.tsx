@@ -10,7 +10,7 @@ export default function NavBar() {
     router.push("/auth/login");
   };
   return (
-    <header className="flex justify-between px-10 py-5 bg-[rgba(0,0,0,0.6)]">
+    <header className="flex justify-between px-10 sticky top-0 py-5 bg-[rgba(0,0,0,0.6)]">
       <div>Logo</div>
       <nav></nav>
       <div className="hover:transform cursor-pointer" onClick={handleLogOut}>
