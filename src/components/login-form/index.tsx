@@ -1,19 +1,17 @@
 "use client";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useRegister } from "@/hooks/useRegister";
-import Spinner from "../loader-spinner/spinner";
 import Link from "next/link";
+import Spinner from "@/components/loader-spinner/spinner";
+import { useLogin } from "@/hooks/useRegister";
 
-export default function RegisterForm() {
+export default function LoginForm() {
   const [form, setForm] = useState({
-    nombre: "",
     email: "",
     password: "",
-    confirmPassword: "",
   });
 
-  const registerMutation = useRegister();
+  const loginMutation = useLogin();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({
@@ -23,17 +21,12 @@ export default function RegisterForm() {
   };
 
   const handleSubmit = async () => {
-    if (
-      form.password !== form.confirmPassword ||
-      form.password === "" ||
-      form.confirmPassword === ""
-    ) {
-      toast.error("Las passwords deben ser iguales y no pueden ser vacias.");
+    if (form.email === "" || form.password === "") {
+      toast.error("Todos los campos son obligatorios.");
       return;
     }
 
-    registerMutation.mutate({
-      name: form.nombre,
+    loginMutation.mutate({
       email: form.email,
       password: form.password,
     });
@@ -82,14 +75,6 @@ export default function RegisterForm() {
       <input
         className="bg-white px-5 py-2 rounded-[5px] text-black"
         type="text"
-        name="nombre"
-        value={form.nombre}
-        onChange={handleChange}
-        placeholder="Ingresa tu nombre"
-      />
-      <input
-        className="bg-white px-5 py-2 rounded-[5px] text-black"
-        type="text"
         name="email"
         value={form.email}
         onChange={handleChange}
@@ -101,26 +86,20 @@ export default function RegisterForm() {
         name="password"
         value={form.password}
         onChange={handleChange}
-        placeholder="Ingresa tu contra"
-      />
-      <input
-        className="bg-white px-5 py-2 rounded-[5px] text-black"
-        type="password"
-        name="confirmPassword"
-        value={form.confirmPassword}
-        onChange={handleChange}
-        placeholder="Confirma tu contra"
+        placeholder="Ingresa tu contraseña"
       />
       <button
         className="px-10 py-2 rounded-[10px] cursor-pointer bg-white/20 border border-white/30 shadow-lg backdrop-blur-md text-white transition hover:bg-white/30 hover:border-white/50 font-bold"
         onClick={handleSubmit}
-        disabled={registerMutation.isPending}
+        disabled={loginMutation.isPending}
       >
-        {registerMutation.isPending ? <Spinner /> : "Registrame"}
+        {loginMutation.isPending ? <Spinner /> : "Iniciar Sesión"}
       </button>
       <p className="text-center">
-        Ya tengo una cuenta quiero,{" "}
-        <Link className="font-bold text-[#8e5ae0]" href={"/auth/login"}>iniciar sesion.</Link>
+        ¿No tienes cuenta?{" "}
+        <Link className="font-bold text-[#8e5ae0]" href={"/auth/register"}>
+          Regístrate aquí.
+        </Link>
       </p>
     </div>
   );
